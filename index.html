@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Новая задача | Task Manager</title>
+
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-icon">�</div>
+            <h1>Новая задача</h1>
+            <p class="subtitle">Пожалуйста, заполните краткое описание. Это поможет нам не терять контекст и быстрее
+                оценивать сроки.</p>
+        </header>
+
+        <!-- Form -->
+        <form id="task-form" class="form">
+            <!-- Task Type Field -->
+            <div class="form-group">
+                <label for="task-type">
+                    <span class="label-icon">🏷️</span>
+                    Тип задачи
+                    <span class="required">*</span>
+                </label>
+                <div class="select-wrapper">
+                    <select id="task-type" name="taskType" required>
+                        <option value="" disabled selected>Выберите тип...</option>
+                        <option value="fix">🔧 Правка</option>
+                        <option value="feature">✨ Новый функционал</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Priority Field -->
+            <div class="form-group">
+                <label>
+                    <span class="label-icon">�</span>
+                    Приоритет
+                    <span class="required">*</span>
+                </label>
+                <div class="priority-selector priority-3col">
+                    <input type="radio" id="priority-urgent" name="priority" value="urgent">
+                    <label for="priority-urgent" class="priority-option urgent">
+                        <span class="priority-emoji">🚨</span>
+                        <span class="priority-name">Срочно</span>
+                        <span class="priority-desc">Делаем прямо сейчас</span>
+                    </label>
+
+                    <input type="radio" id="priority-normal" name="priority" value="normal" checked>
+                    <label for="priority-normal" class="priority-option normal">
+                        <span class="priority-emoji">📋</span>
+                        <span class="priority-name">В планах</span>
+                        <span class="priority-desc">В порядке очереди</span>
+                    </label>
+
+                    <input type="radio" id="priority-backlog" name="priority" value="backlog">
+                    <label for="priority-backlog" class="priority-option backlog">
+                        <span class="priority-emoji">�</span>
+                        <span class="priority-name">Идея/Беклог</span>
+                        <span class="priority-desc">Когда будет время</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Title Field -->
+            <div class="form-group">
+                <label for="title">
+                    <span class="label-icon">📌</span>
+                    Название (Суть задачи)
+                    <span class="required">*</span>
+                </label>
+                <input type="text" id="title" name="title" placeholder="Что сделать?" maxlength="100" required
+                    autocomplete="off">
+                <span class="char-counter"><span id="title-count">0</span>/100</span>
+            </div>
+
+            <!-- Description Field -->
+            <div class="form-group">
+                <label for="desc">
+                    <span class="label-icon">📝</span>
+                    Описание (Что, где, ссылки)
+                </label>
+                <textarea id="desc" name="desc" placeholder="Детали задачи, ссылки, контекст..." rows="5"></textarea>
+            </div>
+
+            <!-- Screenshot/File Attachment -->
+            <div class="form-group">
+                <label for="file-input">
+                    <span class="label-icon">📎</span>
+                    Скриншоты (Если есть)
+                </label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="file-input" name="file" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx" multiple>
+                    <label for="file-input" class="file-upload-btn">
+                        <span class="upload-icon">�</span>
+                        <span class="upload-text">Выберите файл</span>
+                    </label>
+                    <div id="file-preview" class="file-preview"></div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+            <button type="button" id="submit-btn" class="submit-btn">
+                <span class="btn-icon">✅</span>
+                <span class="btn-text">Отправить задачу</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Loader Overlay -->
+    <div id="loader" class="loader-overlay hidden">
+        <div class="loader-spinner"></div>
+        <p>Публикуем задачу...</p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
