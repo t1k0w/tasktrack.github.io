@@ -425,6 +425,8 @@ textarea {
             var(--tg-theme-bg-color) 60%,
             transparent 100%);
     z-index: 100;
+    display: none;
+    /* Hidden by default, shown only if NOT in Telegram or logic requires it */
 }
 
 .submit-btn {

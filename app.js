@@ -257,16 +257,18 @@ function updateMainButton() {
 
     if (isValid) {
         tg.MainButton.show();
-        // Hide HTML button to avoid duplicate
+        // Hide HTML button explicitly
         document.querySelector('.submit-section').style.display = 'none';
-
         // Update padding to avoid content being hidden behind MainButton
         document.getElementById('app').style.paddingBottom = '20px';
     } else {
         tg.MainButton.hide();
-        // Show HTML button if MainButton is hidden (or valid logic changes)
-        document.querySelector('.submit-section').style.display = 'block';
-        document.getElementById('app').style.paddingBottom = '120px';
+        // Only show HTML button if NOT in Telegram environment (platform is unknown)
+        // OR if you want it as fallback. For now, let's keep it hidden if empty to avoid clutter
+        // if (tg.platform === 'unknown') {
+        //     document.querySelector('.submit-section').style.display = 'block';
+        //     document.getElementById('app').style.paddingBottom = '120px';
+        // }
     }
 }
 
