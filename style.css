@@ -82,12 +82,22 @@ body {
     animation: fadeInDown 0.5s ease-out;
 }
 
-.header-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
+.logo-container {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.header-logo {
+    max-width: 200px;
+    height: auto;
+    border-radius: 12px;
+    /* Optional: if you want to invert colors for dark mode */
+    /* filter: invert(1); */
     animation: pulse 2s infinite;
 }
 
+/* 
 .header h1 {
     font-size: 24px;
     font-weight: 700;
@@ -96,7 +106,8 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-}
+} 
+*/
 
 .subtitle {
     color: var(--tg-theme-hint-color);
