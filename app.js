@@ -252,21 +252,26 @@ tg.MainButton.color = tg.themeParams.button_color || '#6c63ff';
 tg.MainButton.textColor = tg.themeParams.button_text_color || '#ffffff';
 
 // Show main button when form has title
-titleInput.addEventListener('input', () => {
-    if (titleInput.value.trim() && getTaskType()) {
-        tg.MainButton.show();
-    } else {
-        tg.MainButton.hide();
-    }
-});
+function updateMainButton() {
+    const isValid = titleInput.value.trim() && getTaskType();
 
-taskTypeSelect.addEventListener('change', () => {
-    if (titleInput.value.trim() && getTaskType()) {
+    if (isValid) {
         tg.MainButton.show();
+        // Hide HTML button to avoid duplicate
+        document.querySelector('.submit-section').style.display = 'none';
+
+        // Update padding to avoid content being hidden behind MainButton
+        document.getElementById('app').style.paddingBottom = '20px';
     } else {
         tg.MainButton.hide();
+        // Show HTML button if MainButton is hidden (or valid logic changes)
+        document.querySelector('.submit-section').style.display = 'block';
+        document.getElementById('app').style.paddingBottom = '120px';
     }
-});
+}
+
+titleInput.addEventListener('input', updateMainButton);
+taskTypeSelect.addEventListener('change', updateMainButton);
 
 tg.MainButton.onClick(submitForm);
 
