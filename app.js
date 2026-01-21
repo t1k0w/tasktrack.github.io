@@ -29,11 +29,7 @@ const descInput = document.getElementById('desc');
 const titleCounter = document.getElementById('title-count');
 const submitBtn = document.getElementById('submit-btn');
 const loader = document.getElementById('loader');
-const fileInput = document.getElementById('file-input');
-const filePreview = document.getElementById('file-preview');
 
-// Store selected files
-let selectedFiles = [];
 
 // Character counter for title
 titleInput.addEventListener('input', () => {
@@ -61,64 +57,7 @@ function getTaskType() {
     return taskTypeSelect.value;
 }
 
-// File handling
-fileInput.addEventListener('change', (e) => {
-    const files = Array.from(e.target.files);
 
-    files.forEach(file => {
-        // Max 5 files
-        if (selectedFiles.length >= 5) {
-            tg.showAlert('Максимум 5 файлов');
-            return;
-        }
-
-        // Max 10MB per file
-        if (file.size > 10 * 1024 * 1024) {
-            tg.showAlert(`Файл ${file.name} слишком большой (макс. 10MB)`);
-            return;
-        }
-
-        selectedFiles.push(file);
-        addFileToPreview(file);
-    });
-
-    // Reset input to allow selecting same file again
-    fileInput.value = '';
-});
-
-function addFileToPreview(file) {
-    const fileItem = document.createElement('div');
-    fileItem.className = 'file-item';
-
-    // Check if it's an image
-    if (file.type.startsWith('image/')) {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        fileItem.appendChild(img);
-    } else {
-        const icon = document.createElement('span');
-        icon.textContent = '📄';
-        icon.style.fontSize = '24px';
-        fileItem.appendChild(icon);
-    }
-
-    const fileName = document.createElement('span');
-    fileName.className = 'file-name';
-    fileName.textContent = file.name;
-    fileItem.appendChild(fileName);
-
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'remove-file';
-    removeBtn.textContent = '✕';
-    removeBtn.onclick = () => {
-        selectedFiles = selectedFiles.filter(f => f !== file);
-        fileItem.remove();
-    };
-    fileItem.appendChild(removeBtn);
-
-    filePreview.appendChild(fileItem);
-}
 
 // Validate form
 function validateForm() {
@@ -164,20 +103,7 @@ function hideLoader() {
     submitBtn.disabled = false;
 }
 
-// Convert file to base64
-function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve({
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            data: reader.result
-        });
-        reader.onerror = error => reject(error);
-    });
-}
+
 
 // Submit form data to Telegram
 async function submitForm() {
@@ -192,20 +118,8 @@ async function submitForm() {
         taskType: getTaskType(),
         title: titleInput.value.trim(),
         desc: descInput.value.trim(),
-        priority: getSelectedPriority(),
-        filesCount: selectedFiles.length
+        priority: getSelectedPriority()
     };
-
-    // If there are files, convert first one to base64 (Telegram has limits)
-    // Note: For multiple/large files, you'd need a separate upload mechanism
-    if (selectedFiles.length > 0 && selectedFiles[0].size < 1024 * 1024) {
-        try {
-            const fileData = await fileToBase64(selectedFiles[0]);
-            data.file = fileData;
-        } catch (err) {
-            console.warn('Could not process file:', err);
-        }
-    }
 
     // Haptic feedback
     if (tg.HapticFeedback) {
