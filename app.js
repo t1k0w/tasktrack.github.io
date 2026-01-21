@@ -129,14 +129,18 @@ async function submitForm() {
     // Small delay for UX
     setTimeout(() => {
         try {
+            console.log('Sending data to bot:', data);
             // Send data to bot
             tg.sendData(JSON.stringify(data));
+
+            // If we are here and app hasn't closed, maybe sendData isn't closing it
+            // tg.close(); 
         } catch (error) {
             console.error('Error sending data:', error);
             hideLoader();
 
             // Show error alert
-            tg.showAlert('Ошибка отправки данных. Попробуйте еще раз.');
+            tg.showAlert('Ошибка отправки данных: ' + error.message);
         }
     }, 500);
 }
